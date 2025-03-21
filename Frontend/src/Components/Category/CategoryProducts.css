@@ -1,0 +1,35 @@
+/* CategoryProducts.css */
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product-item {
+  border: 1px solid #ddd;
+  padding: 15px;
+  text-align: center;
+  width: 100%; /* Changed to responsive width */
+  max-width: 200px; /* Added max-width for better alignment */
+}
+
+
+.product-item img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.product-link {
+  text-decoration: none;
+  color: inherit; /* Inherit text color from parent (prevents blue link color) */
+}
+
+.product-link .item p,
+.product-link .item-price-new,
+.product-link .item-price-old,
+.product-link .add-to-cart-btn,
+.product-link .add-to-wishlist-btn {
+  text-decoration: none;
+}

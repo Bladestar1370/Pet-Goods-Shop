@@ -198,12 +198,21 @@ app.post('/login',async(req,res)=> {
             res.json({success:true,token});
         }
         else {
-            res.json({sucess:false,error:"Wrong Password"});
+            res.json({success:false,error:"Wrong Password"});
         }
     }
     else {
         res.json({success:false,errors:"Wrong Email Id"});
     }
+})
+
+// Creating Endpoint for New Collection Data
+
+app.get('/newcollection',async (req,res)=> {
+    let products = await Product.find({});
+    let newcollection = products.slice(1).slice(-8);
+    console.log("NewCollection fetch");
+    res.send(newcollection);
 })
 
 

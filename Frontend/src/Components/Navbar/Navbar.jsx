@@ -37,9 +37,12 @@ export const Navbar = () => {
               </Link>
             </li>
             <li className="border">
-              <Link to="/login" aria-label="Go to login/signup">
-                <i className="fa-regular fa-user"></i>
-              </Link>
+              {localStorage.getItem('auth-token')
+              ?<button onClick={()=>{localStorage.removeItem('auth-token');window.location.replace('/')}}>Logout</button>
+            :<Link to="/login" aria-label="Go to login/signup">
+            <i className="fa-regular fa-user"></i>
+          </Link>}
+              
             </li>
           </ul>
         </div>

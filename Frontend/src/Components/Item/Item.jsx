@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import "./Item.css";
-import { Link } from "react-router-dom";
 import { ShopContext } from "../CartContext/ShopContext";
 
 export const Item = (props) => {
@@ -10,20 +9,16 @@ export const Item = (props) => {
   return (
     <div className="item">
       <div className="item-content">
-        <Link to={`/product/${props.id}`}>
-          <img
-            onClick={window.scrollTo(0, 0)}
-            src={props.image}
-            alt={props.name}
-          />
-        </Link>
+        <img
+          onClick={() => window.scrollTo(0, 0)}
+          src={props.image}
+          alt={props.name}
+        />
         <div className="item-name">
           <h3>{props.name}</h3>
-
           <p className="item-description">
             {props.category || "No category available"}
           </p>
-
           <div className="item-prices">
             <div className="item-price">${props.new_price}</div>
           </div>

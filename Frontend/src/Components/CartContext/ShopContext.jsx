@@ -1,20 +1,20 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import allProducts from "../Assets/all_products.js";
+
 
 export const ShopContext = createContext();
 
 const getDefaultCart = () => {
   let cart = {};
-  for (let index = 0; index < allProducts.length; index++) {
-    cart[allProducts[index].id] = 0;
+  for (let index = 0; index < 300+1; index++) {
+    cart[index] = 0;
   }
   return cart;
 };
 
 const getDefaultWishlist = () => {
   let wishlist = {};
-  for (let index = 0; index < allProducts.length; index++) {
-    wishlist[allProducts[index].id] = false;
+  for (let index = 0; index < 300+1; index++) {
+    wishlist[index] = false;
   }
   return wishlist;
 };
@@ -23,6 +23,12 @@ export const ShopContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(getDefaultCart());
   const [wishlistItems, setWishlistItems] = useState(getDefaultWishlist());
   const [all_products, setAllProducts] = useState([]);
+
+  useEffect(()=>{
+    fetch('http://localhost:4000/allproducts')
+    .then((response)=>response.json())
+    .then((data)=>setAllProducts(data))
+  },[])
 
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
@@ -72,10 +78,6 @@ export const ShopContextProvider = ({ children }) => {
     return totalItem;
   };
 
-  useEffect(() => {
-    // Assuming allProducts is an array of products
-    setAllProducts(allProducts);
-  }, []);
 
   const contextValue = {
     getTotalCartItems,

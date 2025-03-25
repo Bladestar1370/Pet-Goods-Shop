@@ -1,11 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-
 export const ShopContext = createContext();
 
 const getDefaultCart = () => {
   let cart = {};
-  for (let index = 0; index < 300+1; index++) {
+  for (let index = 0; index < 300 + 1; index++) {
     cart[index] = 0;
   }
   return cart;
@@ -13,7 +12,7 @@ const getDefaultCart = () => {
 
 const getDefaultWishlist = () => {
   let wishlist = {};
-  for (let index = 0; index < 300+1; index++) {
+  for (let index = 0; index < 300 + 1; index++) {
     wishlist[index] = false;
   }
   return wishlist;
@@ -24,15 +23,27 @@ export const ShopContextProvider = ({ children }) => {
   const [wishlistItems, setWishlistItems] = useState(getDefaultWishlist());
   const [all_products, setAllProducts] = useState([]);
 
-  useEffect(()=>{
-    fetch('http://localhost:4000/allproducts')
-    .then((response)=>response.json())
-    .then((data)=>setAllProducts(data))
-  },[])
+  useEffect(() => {
+    fetch("http://localhost:4000/allproducts")
+      .then((response) => response.json())
+      .then((data) => setAllProducts(data));
+  }, []);
 
   const addToCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
-    console.log(cartItems);
+    setCartItems((prev) => ({ ...prev, [itemId]:prev[itemId] + 1 }));
+    if (localStorage.getItem("auth-token")) {
+      fetch("http://localhost:4000/addtocart", {
+        method: "POST",
+        headers: {
+          Accept: "application/form-data",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "Content-Type": "application/token",
+        },
+        body: JSON.stringify({ itemId: itemId }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+    }
   };
 
   const removeFromCart = (itemId) => {
@@ -51,9 +62,12 @@ export const ShopContextProvider = ({ children }) => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        let itemInfo = all_products.find((product) => product.id === Number(item));
+        let itemInfo = all_products.find(
+          (product) => product.id === Number(item)
+        );
         totalAmount += itemInfo.new_price * cartItems[item];
       }
+      
     }
     return totalAmount;
   };
@@ -78,7 +92,6 @@ export const ShopContextProvider = ({ children }) => {
     return totalItem;
   };
 
-
   const contextValue = {
     getTotalCartItems,
     getTotalCartAmount,
@@ -93,9 +106,7 @@ export const ShopContextProvider = ({ children }) => {
   };
 
   return (
-    <ShopContext.Provider value={contextValue}>
-      {children}
-    </ShopContext.Provider>
+    <ShopContext.Provider value={contextValue}>{children}</ShopContext.Provider>
   );
 };
 

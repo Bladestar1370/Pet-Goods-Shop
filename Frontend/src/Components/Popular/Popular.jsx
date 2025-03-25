@@ -6,12 +6,12 @@ import Item from "../Item/Item"; // Adjust the path as needed
 
 export const Popular = () => {
 
-  const [new_collection,setNew_collection] = useState([]);
+  const [popular,setpopular] = useState([]);
 
   useEffect(()=>{
-    fetch('http://localhost:4000/newcollection')
+    fetch('http://localhost:4000/popular')
     .then((response)=>response.json())
-    .then((data)=>setNew_collection(data));
+    .then((data)=>setpopular(data));
   },[])
 
   return (
@@ -19,7 +19,7 @@ export const Popular = () => {
       <h1>Popular Products</h1>
       <hr />
       <div className="popular-item">
-        {new_collection.map((product) => (
+        {popular.map((product) => (
           <Link
             to={`/product/${product.id}`}
             key={product.id}

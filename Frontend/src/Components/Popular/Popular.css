@@ -26,7 +26,7 @@
     gap: 2px; /* Adjusted gap for better alignment */
     justify-content: center;
 }
-<<<<<<< HEAD
+
 
 @media (max-width: 1024px) {
     .popular {
@@ -70,5 +70,3 @@
         gap:2px;
     }
 }
-=======
->>>>>>> 08a7be888493e252335cf20c8f5121f3e1ff0a3f

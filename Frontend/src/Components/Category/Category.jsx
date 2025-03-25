@@ -5,7 +5,7 @@ const categories = [
   { id: 1, name: "Dog", img: "/pets/dog.png", bgColor: "#f7b885" },
   { id: 2, name: "Cat", img: "/pets/cat.png", bgColor: "#D4E157" },
   { id: 3, name: "Rabbit", img: "/pets/rabbit.png", bgColor: "#f78c6c" },
-  { id: 4, name: "Birds", img: "/pets/bird.png", bgColor: "#90CAF9" },
+  { id: 4, name: "Bird", img: "/pets/bird.png", bgColor: "#90CAF9" },
   { id: 5, name: "Fish", img: "/pets/fish.png", bgColor: "#7efc83" },
 ];
 

@@ -27,6 +27,19 @@ export const ShopContextProvider = ({ children }) => {
     fetch("http://localhost:4000/allproducts")
       .then((response) => response.json())
       .then((data) => setAllProducts(data));
+
+      if(localStorage.getItem('auth-token')) {
+        fetch('http://localhost:4000/getcart', {
+          method: 'POST',
+          headers: {
+            Accept:'appication/form-data',
+            'auth-token':`${localStorage.getItem('auth-token')}`,
+            'Content-Type':'application/json',
+          },
+          body:"",
+        }).then((response)=>response.json())
+        .then((data)=>setCartItems(data));
+      }
   }, []);
 
   const addToCart = (itemId) => {
@@ -37,7 +50,7 @@ export const ShopContextProvider = ({ children }) => {
         headers: {
           Accept: "application/form-data",
           "auth-token": `${localStorage.getItem("auth-token")}`,
-          "Content-Type": "application/token",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ itemId: itemId }),
       })
@@ -48,6 +61,20 @@ export const ShopContextProvider = ({ children }) => {
 
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) - 1 }));
+    if(localStorage.getItem('auth-token')) {
+      fetch("http://localhost:4000/removefromcart", {
+        method: "POST",
+        headers: {
+          Accept: "application/form-data",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ itemId: itemId }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+    }
+
   };
 
   const addToWishlist = (itemId) => {

@@ -11,6 +11,7 @@ import { ShopContextProvider } from "../src/Components/CartContext/ShopContext.j
 import { LoginSignUp } from "./page/Login/LoginSignup.jsx";
 import Cart from "./page/Cart.jsx";
 import SearchResults from "./Components/SearchResults/SearchResult.jsx";
+import Checkout from './Components/Checkout/Checkout.jsx';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/login" element={<LoginSignUp />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/search-results" element={<SearchResults />} />
+            <Route path="/checkout" element={<Checkout />} />
           </Route>
         </Routes>
       </Router>

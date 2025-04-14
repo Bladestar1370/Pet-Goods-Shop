@@ -1,0 +1,202 @@
+/* src/Components/Checkout/Checkout.css */
+.container {
+    margin: 70px 100px;
+    font-family: "Spartan", sans-serif;
+  }
+  
+  .checkoutLayout {
+    display: flex;
+    gap: 40px;
+  }
+  
+  .returnCart {
+    flex: 1;
+    background: #e0dada;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .returnCart a {
+    color: #ff5a5a;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 15px;
+  }
+  
+  .returnCart a:hover {
+    text-decoration: underline;
+  }
+  
+  .returnCart h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .cart-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ebebeb;
+  }
+  
+  .cart-card-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .cart-card-info {
+    flex: 1;
+  }
+  
+  .cart-card .name {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  
+  .cart-card .price {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .cart-card .quantity {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .cart-card .returnPrice {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ff5a5a;
+  }
+  
+  .right {
+    flex: 1;
+    padding: 20px;
+    background: #d6cece;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+  }
+  
+  .right h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .group input,
+  .group select {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ebebeb;
+    border-radius: 4px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .group input:focus,
+  .group select:focus {
+    border-color: #ff5a5a;
+  }
+  
+  .return {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 4px;
+  }
+  
+  .return .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .return .row .totalQuantity,
+  .return .row .totalPrice {
+    font-weight: 600;
+    color: #ff5a5a;
+  }
+  
+  .buttonCheckout {
+    width: 100%;
+    height: 58px;
+    background: #ff5a5a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .buttonCheckout:hover {
+    background: #e04f4f;
+  }
+  
+  @media (max-width: 1280px) {
+    .container {
+      margin: 60px 50px;
+    }
+  
+    .checkoutLayout {
+      flex-direction: column;
+    }
+  
+    .returnCart,
+    .right {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      margin: 50px 20px;
+    }
+  
+    .cart-card-image {
+      width: 50px;
+      height: 50px;
+    }
+  
+    .returnCart h1,
+    .right h1 {
+      font-size: 20px;
+    }
+  }

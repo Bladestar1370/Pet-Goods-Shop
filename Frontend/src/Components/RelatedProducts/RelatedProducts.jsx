@@ -1,15 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./RelatedProducts.css";
-import data_product from "../Assets/data";
 import Item from "../Item/Item";
 
 export const RelatedProducts = () => {
+
+  const [related,setrelated] = useState([]);
+
+  useEffect(()=>{
+      fetch('http://localhost:4000/popular')
+      .then((response)=>response.json())
+      .then((data)=>setrelated(data));
+    },[])
+
   return (
     <div className="relatedproducts">
       <h1>Related Products</h1>
       <hr />
       <div className="relatedproducts-item">
-        {data_product.map((product, id) => {
+        {related.map((product, id) => {
           return (
             <Item
               key={product.id} // Add a unique key for each item

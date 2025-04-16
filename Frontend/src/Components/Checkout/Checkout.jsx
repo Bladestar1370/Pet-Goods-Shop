@@ -2,6 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShopContext } from '../CartContext/ShopContext';
 import './Checkout.css';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('pk_test_51REAhMPShTW9fI5NMa5QLKIwVNsVf79qBGk6zCPGWrg1KHT0nPO7gdKn6X2k2KG1GnWYivOIjjY12quofobRyw8s00ecNZzixH'); // Replace with your Stripe publishable key
 
 const Checkout = () => {
   const { all_products, cartItems, getTotalCartAmount } = useContext(ShopContext);
@@ -27,11 +30,68 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  // Handle form submission with Stripe
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Checkout data:', { cartItems, formData, total: getTotalCartAmount() });
-    // TODO: Proceed to payment (e.g., Stripe)
+    const stripe = await stripePromise;
+    const response = await fetch('http://localhost:4000/create-payment-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: getTotalCartAmount() }),
+    });
+    const { clientSecret } = await response.json();
+
+    // Prepare order data
+    const orderItems = all_products
+      .filter(product => cartItems[product.id] > 0)
+      .map(product => ({
+        productId: product.id,
+        name: product.name,
+        price: product.new_price,
+        quantity: cartItems[product.id],
+      }));
+    const orderData = {
+      items: orderItems,
+      shipping: formData,
+      total: getTotalCartAmount(),
+    };
+
+    // Save order
+    const orderResponse = await fetch('http://localhost:4000/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('auth-token'),
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    if (orderResponse.ok) {
+      await fetch('http://localhost:4000/clear-cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('auth-token'),
+        },
+      });
+      const result = await stripe.redirectToCheckout({
+        lineItems: [
+          {
+            price: 'price_1YOURCUSTOMPRICE', // Replace with dynamic price ID
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        successUrl: 'http://localhost:5173/confirmation',
+        cancelUrl: 'http://localhost:5173/checkout',
+      });
+
+      if (result.error) {
+        console.error(result.error.message);
+      }
+    } else {
+      console.error('Order save failed');
+    }
   };
 
   // Calculate total quantity

@@ -1,26 +1,33 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import "./CategoryProducts.css";
-import Item from "../Item/Item"; // Adjust the path as needed
-import { ShopContext } from "../CartContext/ShopContext"; // Import the context
+import Item from "../Item/Item";
+import { ShopContext } from "../CartContext/ShopContext";
 
 const CategoryProducts = () => {
   const { name } = useParams();
-  const { all_products: allProducts } = useContext(ShopContext); // Use context to get allProducts
+  const location = useLocation();
+  const { all_products: allProducts } = useContext(ShopContext);
   const [products, setProducts] = useState([]);
+  const isProductType = location.pathname.includes("/product-type/");
 
   useEffect(() => {
     if (allProducts) {
       const filteredProducts = allProducts.filter((product) =>
-        product.category.toLowerCase().includes(name.toLowerCase())
+        isProductType
+          ? product.productType?.toLowerCase().includes(name.toLowerCase())
+          : product.category?.toLowerCase().includes(name.toLowerCase())
       );
       setProducts(filteredProducts);
     }
-  }, [name, allProducts]);
+  }, [name, allProducts, isProductType]);
 
   return (
     <div className="category-products">
-      <h2>{name.charAt(0).toUpperCase() + name.slice(1)} Products</h2>
+      <h2>
+        {name.charAt(0).toUpperCase() + name.slice(1)}{" "}
+        {isProductType ? "Products" : "Pet Products"}
+      </h2>
       <div className="product-list">
         {products.map((product) => (
           <Link

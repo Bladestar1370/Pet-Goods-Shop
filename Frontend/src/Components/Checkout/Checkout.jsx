@@ -4,7 +4,7 @@ import { ShopContext } from '../CartContext/ShopContext';
 import './Checkout.css';
 import { loadStripe } from '@stripe/stripe-js';
 
-const stripePromise = loadStripe('pk_test_51REAhMPShTW9fI5NMa5QLKIwVNsVf79qBGk6zCPGWrg1KHT0nPO7gdKn6X2k2KG1GnWYivOIjjY12quofobRyw8s00ecNZzixH'); // Replace with your Stripe publishable key
+const stripePromise = loadStripe('pk_test_51REAhMPShTW9fI5NMa5QLKIwVNsVf79qBGk6zCPGWrg1KHT0nPO7gdKn6X2k2KG1GnWYivOIjjY12quofobRyw8s00ecNZzixH'); // Your Stripe publishable key
 
 const Checkout = () => {
   const { all_products, cartItems, getTotalCartAmount } = useContext(ShopContext);
@@ -19,6 +19,7 @@ const Checkout = () => {
 
   // Authentication check
   useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to top on page load
     const token = localStorage.getItem('auth-token');
     if (!token) {
       navigate('/login');
@@ -30,43 +31,72 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission with Stripe
+  // Handle form submission with Stripe Checkout
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const stripe = await stripePromise;
-    const response = await fetch('http://localhost:4000/create-payment-intent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: getTotalCartAmount() }),
-    });
-    const { clientSecret } = await response.json();
+    try {
+      // Prepare line items for Stripe Checkout
+      const lineItems = all_products
+        .filter(product => cartItems[product.id] > 0)
+        .map(product => ({
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: product.name,
+            },
+            unit_amount: Math.round(product.new_price * 100), // Convert to cents
+          },
+          quantity: cartItems[product.id],
+        }));
 
-    // Prepare order data
-    const orderItems = all_products
-      .filter(product => cartItems[product.id] > 0)
-      .map(product => ({
-        productId: product.id,
-        name: product.name,
-        price: product.new_price,
-        quantity: cartItems[product.id],
-      }));
-    const orderData = {
-      items: orderItems,
-      shipping: formData,
-      total: getTotalCartAmount(),
-    };
+      // Create Checkout Session
+      const response = await fetch('http://localhost:4000/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('auth-token'),
+        },
+        body: JSON.stringify({
+          lineItems,
+          shipping: formData,
+          total: getTotalCartAmount(),
+        }),
+      });
 
-    // Save order
-    const orderResponse = await fetch('http://localhost:4000/orders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('auth-token'),
-      },
-      body: JSON.stringify(orderData),
-    });
+      const session = await response.json();
+      if (!response.ok) {
+        throw new Error(session.error || 'Failed to create checkout session');
+      }
 
-    if (orderResponse.ok) {
+      // Save order
+      const orderData = {
+        items: all_products
+          .filter(product => cartItems[product.id] > 0)
+          .map(product => ({
+            productId: product.id,
+            name: product.name,
+            price: product.new_price,
+            quantity: cartItems[product.id],
+          })),
+        shipping: formData,
+        total: getTotalCartAmount(),
+        stripeSessionId: session.id,
+      };
+
+      const orderResponse = await fetch('http://localhost:4000/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('auth-token'),
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!orderResponse.ok) {
+        throw new Error('Order save failed');
+      }
+
+      // Clear cart
       await fetch('http://localhost:4000/clear-cart', {
         method: 'POST',
         headers: {
@@ -74,23 +104,20 @@ const Checkout = () => {
           'auth-token': localStorage.getItem('auth-token'),
         },
       });
+
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
       const result = await stripe.redirectToCheckout({
-        lineItems: [
-          {
-            price: 'price_1YOURCUSTOMPRICE', // Replace with dynamic price ID
-            quantity: 1,
-          },
-        ],
-        mode: 'payment',
-        successUrl: 'http://localhost:5173/confirmation',
-        cancelUrl: 'http://localhost:5173/checkout',
+        sessionId: session.id,
       });
 
       if (result.error) {
-        console.error(result.error.message);
+        console.error('Stripe redirect error:', result.error.message);
+        alert('Payment failed: ' + result.error.message);
       }
-    } else {
-      console.error('Order save failed');
+    } catch (error) {
+      console.error('Checkout error:', error.message);
+      alert('Checkout failed: ' + error.message);
     }
   };
 
@@ -101,7 +128,7 @@ const Checkout = () => {
     <div className="container">
       <div className="checkoutLayout">
         <div className="returnCart">
-          <Link to="/">Keep Shopping</Link>
+          <Link to="/" onClick={() => window.scrollTo(0, 0)}>Keep Shopping</Link>
           <h1>List Product in Cart</h1>
           <div className="list">
             {all_products.map((product) => {

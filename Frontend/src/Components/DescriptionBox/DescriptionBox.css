@@ -29,7 +29,6 @@
     border: 1px solid #D0D0D0;
     padding: 48px;
     padding-bottom: 70px;
-<<<<<<< HEAD
 }
 
 @media (max-width: 1280px) {
@@ -45,6 +44,4 @@
     .descriptionbox-description {
         font-size: 14px;
     } 
-=======
->>>>>>> 08a7be888493e252335cf20c8f5121f3e1ff0a3f
 }

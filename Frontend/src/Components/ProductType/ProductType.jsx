@@ -16,6 +16,7 @@ const ProductType = () => {
       <div className="product-type">
         {productTypes.map((type) => (
           <Link
+          onClick={() => window.scrollTo(0, 0)}
             to={`/product-type/${type.name.toLowerCase()}`}
             key={type.id}
             className="by-type"

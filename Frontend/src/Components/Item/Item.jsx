@@ -3,8 +3,13 @@ import "./Item.css";
 import { ShopContext } from "../CartContext/ShopContext";
 
 export const Item = (props) => {
-  const { addToCart } = useContext(ShopContext);
-  const { addToWishlist } = useContext(ShopContext);
+  const { addToCart, addToWishlist } = useContext(ShopContext);
+
+  const handleButtonClick = (e, callback) => {
+    e.preventDefault();
+    e.stopPropagation(); // Prevent click from bubbling to Link
+    callback(props.id);
+  };
 
   return (
     <div className="item">
@@ -25,15 +30,13 @@ export const Item = (props) => {
           <div className="item-buttons">
             <button
               className="add-to-cart-btn"
-              onClick={() => {
-                addToCart(props.id);
-              }}
+              onClick={(e) => handleButtonClick(e, addToCart)}
             >
               Add to Cart
             </button>
             <button
               className="add-to-wishlist-btn"
-              onClick={() => addToWishlist(props.id)}
+              onClick={(e) => handleButtonClick(e, addToWishlist)}
             >
               <i className="fa-regular fa-heart"></i>
             </button>

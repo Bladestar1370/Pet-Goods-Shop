@@ -16,6 +16,7 @@ const Category = () => {
       <div className="pet">
         {categories.map((category) => (
           <Link
+          onClick={() => window.scrollTo(0, 0)}
             to={`/category/${category.name.toLowerCase()}`} // Use lowercase for URL
             key={category.id}
             className="by-pet"

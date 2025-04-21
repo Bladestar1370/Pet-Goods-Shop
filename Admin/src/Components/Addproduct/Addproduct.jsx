@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./Addproduct.css";
 import upload_area from "../../assets/upload_area.svg";
-import { data } from "react-router-dom";
 
 const Addproduct = () => {
   const [image, setImage] = useState(false);
@@ -9,6 +8,7 @@ const Addproduct = () => {
     name: "",
     image: "",
     category: "Dog",
+    productType: "Food", // Add default productType
     new_price: "",
     old_price: "",
   });
@@ -16,7 +16,8 @@ const Addproduct = () => {
   const imageHandler = (e) => {
     setImage(e.target.files[0]);
   };
-  const changeHander = (e) => {
+
+  const changeHandler = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
   };
 
@@ -64,7 +65,7 @@ const Addproduct = () => {
         <p>Product title</p>
         <input
           value={productDetails.name}
-          onChange={changeHander}
+          onChange={changeHandler}
           type="text"
           name="name"
           placeholder="Type here"
@@ -75,7 +76,7 @@ const Addproduct = () => {
           <p>Price</p>
           <input
             value={productDetails.old_price}
-            onChange={changeHander}
+            onChange={changeHandler}
             type="text"
             name="old_price"
             placeholder="Type here"
@@ -85,7 +86,7 @@ const Addproduct = () => {
           <p>Offer Price</p>
           <input
             value={productDetails.new_price}
-            onChange={changeHander}
+            onChange={changeHandler}
             type="text"
             name="new_price"
             placeholder="Type here"
@@ -96,7 +97,7 @@ const Addproduct = () => {
         <p>Product Category</p>
         <select
           value={productDetails.category}
-          onChange={changeHander}
+          onChange={changeHandler}
           name="category"
           className="add-product-selector"
         >
@@ -104,6 +105,21 @@ const Addproduct = () => {
           <option value="Cat">Cat</option>
           <option value="Bird">Bird</option>
           <option value="Fish">Fish</option>
+        </select>
+      </div>
+      <div className="addproduct-itemfield">
+        <p>Product Type</p>
+        <select
+          value={productDetails.productType}
+          onChange={changeHandler}
+          name="productType"
+          className="add-product-selector"
+        >
+          <option value="Food">Food</option>
+          <option value="Toy">Toy</option>
+          <option value="Medicine">Medicine</option>
+          <option value="Accessory">Accessory</option>
+          <option value="Grooming">Grooming</option>
         </select>
       </div>
       <div className="addproduct-itemfield">
@@ -122,12 +138,7 @@ const Addproduct = () => {
           hidden
         />
       </div>
-      <button
-        onClick={() => {
-          Add_product();
-        }}
-        className="addproduct-btn"
-      >
+      <button onClick={Add_product} className="addproduct-btn">
         ADD
       </button>
     </div>

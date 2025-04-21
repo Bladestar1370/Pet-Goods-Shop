@@ -11,6 +11,7 @@ import ProductDetails from "./page/Product.jsx";
 import { ShopContextProvider } from "../src/Components/CartContext/ShopContext.jsx";
 import { LoginSignUp } from "./page/Login/LoginSignup.jsx";
 import Cart from "./page/Cart.jsx";
+import WishlistItems from "./Components/WishlistItems/WishlistItem.jsx";
 import SearchResults from "./Components/SearchResults/SearchResult.jsx";
 import Checkout from './Components/Checkout/Checkout.jsx';
 import Confirmation from './Components/Confirmation/Confirmation.jsx'
@@ -28,6 +29,7 @@ function App() {
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/login" element={<LoginSignUp />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/wishlist" element={<WishlistItems />} />
             <Route path="/search-results" element={<SearchResults />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmation" element={<Confirmation />} />

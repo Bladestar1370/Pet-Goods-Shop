@@ -1,18 +1,18 @@
 // Popular.jsx
 import React, { useEffect, useState } from "react";
 import "./Popular.css";
-import { Link } from "react-router-dom"; // Import Link for navigation
-import Item from "../Item/Item"; // Adjust the path as needed
+import { Link } from "react-router-dom";
+import Item from "../Item/Item";
+import { apiFetch } from "../../utils/apiFetch";
 
 export const Popular = () => {
+  const [popular, setpopular] = useState([]);
 
-  const [popular,setpopular] = useState([]);
-
-  useEffect(()=>{
-    fetch('http://localhost:4000/popular')
-    .then((response)=>response.json())
-    .then((data)=>setpopular(data));
-  },[])
+  useEffect(() => {
+    apiFetch('http://localhost:4000/popular')
+      .then((data) => setpopular(data))
+      .catch((error) => console.error('Error fetching popular products:', error));
+  }, []);
 
   return (
     <div className="popular">

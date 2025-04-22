@@ -1,0 +1,217 @@
+.profile-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #1e3a8a;
+    font-size: 28px;
+    font-weight: 700;
+  }
+  
+  .profile-info {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .profile-info h2 {
+    margin-bottom: 20px;
+    color: #1e3a8a;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  
+  .profile-info p {
+    margin: 12px 0;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .logout-button {
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    display: block;
+    width: fit-content;
+  }
+  
+  .logout-button:hover {
+    background: linear-gradient(135deg, #5c62e2, #9da2fc);
+    transform: scale(1.05);
+    color: #efff0a;
+  }
+  
+  .order-history {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .order-history h2 {
+    margin-bottom: 25px;
+    color: #1e3a8a;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  
+  .order-card {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background: #ffffff;
+    transition: box-shadow 0.2s ease;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .order-card:hover {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .order-card:nth-child(odd) {
+    background: #f8fbff;
+  }
+  
+  .order-card-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e8e8e8;
+    margin-bottom: 15px;
+  }
+  
+  .order-card-header p {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .order-card-header p strong {
+    color: #1e3a8a;
+    font-weight: 600;
+  }
+  
+  .order-card-items {
+    margin: 15px 0;
+  }
+  
+  .order-card-items p {
+    margin: 0 0 10px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e3a8a;
+  }
+  
+  .order-card-items table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .order-card-items th,
+  .order-card-items td {
+    padding: 10px;
+    font-size: 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .order-card-items th {
+    font-weight: 600;
+    color: #1e3a8a;
+    background: #f0f4ff;
+  }
+  
+  .order-card-items td {
+    color: #444;
+  }
+  
+  .order-card-items tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .order-card-shipping {
+    background: #f0f4ff;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .order-card-shipping i {
+    color: #1e3a8a;
+    font-size: 16px;
+  }
+  
+  .order-card-shipping p {
+    margin: 0;
+  }
+  
+  .order-card-shipping strong {
+    color: #1e3a8a;
+    font-weight: 600;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-container {
+      margin: 20px;
+      padding: 15px;
+    }
+  
+    .profile-info,
+    .order-history {
+      padding: 20px;
+    }
+  
+    .logout-button {
+      width: 100%;
+      padding: 12px;
+    }
+  
+    .order-card {
+      padding: 15px;
+    }
+  
+    .order-card-header {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  
+    .order-card-header p {
+      font-size: 14px;
+    }
+  
+    .order-card-items th,
+    .order-card-items td {
+      font-size: 13px;
+      padding: 8px;
+    }
+  
+    .order-card-shipping {
+      font-size: 13px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }

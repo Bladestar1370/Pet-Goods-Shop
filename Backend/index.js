@@ -64,6 +64,8 @@ const Users = mongoose.model('Users', {
     name: { type: String },
     email: { type: String, unique: true },
     password: { type: String },
+    mobile: { type: String },
+    address: { type: String },
     cartData: { type: Object },
     wishlistData: { type: Object },
     date: { type: Date, default: Date.now },
@@ -112,8 +114,8 @@ const fetchUser = async (req, res, next) => {
 app.post('/signup', async (req, res) => {
     try {
         console.log('Signup request:', req.body);
-        const { username, email, password } = req.body;
-        if (!username || !email || !password) {
+        const { username, email, password, mobile, address } = req.body;
+        if (!username || !email || !password || !mobile || !address) {
             return res.status(400).json({ success: false, error: "All fields are required" });
         }
         if (password.length < 8) {
@@ -141,6 +143,8 @@ app.post('/signup', async (req, res) => {
             name: username,
             email,
             password: hashedPassword,
+            mobile,
+            address,
             cartData: cart,
             wishlistData: wishlist,
         });
@@ -184,10 +188,38 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Endpoint to Get User Data
+app.get('/getuser', fetchUser, async (req, res) => {
+    try {
+        console.log('Get user data for user:', req.user.id);
+        let userData = await Users.findOne({ _id: req.user.id }).select('-password -cartData -wishlistData');
+        if (userData) {
+            res.json({ success: true, data: userData });
+        } else {
+            res.status(404).json({ success: false, error: "User not found" });
+        }
+    } catch (error) {
+        console.error('Error in getuser:', error);
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+});
+
+// Endpoint to Get User Orders
+app.get('/getorders', fetchUser, async (req, res) => {
+    try {
+        console.log('Get orders for user:', req.user.id);
+        let orders = await Order.find({ userId: req.user.id }).sort({ createdAt: -1 });
+        res.json({ success: true, data: orders });
+    } catch (error) {
+        console.error('Error in getorders:', error);
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+});
+
 // Endpoint for Adding Product
 app.post('/addproduct', async (req, res) => {
     try {
-        console.log('Received product data:', req.body); // Log incoming data
+        console.log('Received product data:', req.body);
         let products = await Product.find({});
         let id = products.length > 0 ? products.slice(-1)[0].id + 1 : 1;
         const product = new Product({
@@ -196,12 +228,12 @@ app.post('/addproduct', async (req, res) => {
             image: req.body.image,
             category: req.body.category,
             productType: req.body.productType,
-            new_price: Number(req.body.new_price), // Convert to number
-            old_price: Number(req.body.old_price), // Convert to number
-            description: req.body.description || '' // Ensure description is saved
+            new_price: Number(req.body.new_price),
+            old_price: Number(req.body.old_price),
+            description: req.body.description || ''
         });
         await product.save();
-        console.log('Product saved:', product); // Log saved product
+        console.log('Product saved:', product);
         res.json({ success: true, data: { name: req.body.name } });
     } catch (error) {
         console.error('Error in addproduct:', error);

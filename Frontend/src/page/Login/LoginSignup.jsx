@@ -7,6 +7,8 @@ export const LoginSignUp = () => {
     username: "",
     password: "",
     email: "",
+    mobile: "",
+    address: "",
   });
 
   const changeHandler = (e) => {
@@ -14,46 +16,46 @@ export const LoginSignUp = () => {
   };
 
   const login = async () => {
-    console.log("Login Function Executed",formData);
+    console.log("Login Function Executed", formData);
     let responseData;
     await fetch('http://localhost:4000/login', {
-      method:'POST',
+      method: 'POST',
       headers: {
-        Accept:'application/form-data',
-        'Content-Type':'application/json',
+        Accept: 'application/form-data',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
-    }).then((response)=> response.json()).then((data)=>responseData=data)
-    if(responseData.success) {
-      localStorage.setItem('auth-token',responseData.token);
+    })
+      .then((response) => response.json())
+      .then((data) => (responseData = data));
+    if (responseData.success) {
+      localStorage.setItem('auth-token', responseData.token);
       window.location.replace("/");
-    }
-    else {
-      alert(responseData.error)
+    } else {
+      alert(responseData.error);
     }
   };
 
   const signup = async () => {
-    console.log("Signup Function Executed",formData);
+    console.log("Signup Function Executed", formData);
     let responseData;
     await fetch('http://localhost:4000/signup', {
-      method:'POST',
+      method: 'POST',
       headers: {
-        Accept:'application/form-data',
-        'Content-Type':'application/json',
+        Accept: 'application/form-data',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
-    }).then((response)=> response.json()).then((data)=>responseData=data)
-    if(responseData.success) {
-      localStorage.setItem('auth-token',responseData.token);
+    })
+      .then((response) => response.json())
+      .then((data) => (responseData = data));
+    if (responseData.success) {
+      localStorage.setItem('auth-token', responseData.token);
       window.location.replace("/");
-    }
-    else {
-      alert(responseData.error)
+    } else {
+      alert(responseData.error);
     }
   };
-
-
 
   return (
     <div className="loginsignup">
@@ -61,22 +63,40 @@ export const LoginSignUp = () => {
         <h1>{state}</h1>
         <div className="loginsignup-fields">
           {state === "Sign Up" ? (
-            <input
-              name="username"
-              value={formData.username}
-              onChange={changeHandler}
-              type="text"
-              placeholder="Your Name"
-            />
-          ) : (
-            <></>
-          )}
+            <>
+              <input
+                name="username"
+                value={formData.username}
+                onChange={changeHandler}
+                type="text"
+                placeholder="Your Name"
+                required
+              />
+              <input
+                name="mobile"
+                value={formData.mobile}
+                onChange={changeHandler}
+                type="tel"
+                placeholder="Mobile Number"
+                required
+              />
+              <input
+                name="address"
+                value={formData.address}
+                onChange={changeHandler}
+                type="text"
+                placeholder="Address"
+                required
+              />
+            </>
+          ) : null}
           <input
             name="email"
             value={formData.email}
             onChange={changeHandler}
             type="email"
             placeholder="Email Address"
+            required
           />
           <input
             name="password"
@@ -84,6 +104,7 @@ export const LoginSignUp = () => {
             onChange={changeHandler}
             type="password"
             placeholder="Password"
+            required
           />
         </div>
         <button
@@ -95,18 +116,18 @@ export const LoginSignUp = () => {
         </button>
         {state === "Sign Up" ? (
           <p className="loginsignup-login">
-            Already have an account?
+            Already have an account?{" "}
             <span onClick={() => setState("Login")}>Login Here</span>
           </p>
         ) : (
           <p className="loginsignup-login">
-            Create an account?
+            Create an account?{" "}
             <span onClick={() => setState("Sign Up")}>Click Here</span>
           </p>
         )}
         <div className="loginsignup-agree">
-          <input type="checkbox" name="" id="" />
-          <p>By continuing, i agree to the terms of use & privacy policy.</p>
+          <input type="checkbox" name="" id="" required />
+          <p>By continuing, I agree to the terms of use & privacy policy.</p>
         </div>
       </div>
     </div>

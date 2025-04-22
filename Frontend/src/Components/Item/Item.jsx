@@ -7,7 +7,7 @@ export const Item = (props) => {
 
   const handleButtonClick = (e, callback) => {
     e.preventDefault();
-    e.stopPropagation(); // Prevent click from bubbling to Link
+    e.stopPropagation();
     callback(props.id);
   };
 

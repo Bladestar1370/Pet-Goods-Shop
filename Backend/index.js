@@ -54,6 +54,7 @@ const Product = mongoose.model('Product', {
     productType: { type: String, required: true },
     new_price: { type: Number, required: true },
     old_price: { type: Number, required: true },
+    description: { type: String, default: '' },
     date: { type: Date, default: Date.now },
     available: { type: Boolean, default: true },
 });
@@ -186,6 +187,7 @@ app.post('/login', async (req, res) => {
 // Endpoint for Adding Product
 app.post('/addproduct', async (req, res) => {
     try {
+        console.log('Received product data:', req.body); // Log incoming data
         let products = await Product.find({});
         let id = products.length > 0 ? products.slice(-1)[0].id + 1 : 1;
         const product = new Product({
@@ -194,11 +196,12 @@ app.post('/addproduct', async (req, res) => {
             image: req.body.image,
             category: req.body.category,
             productType: req.body.productType,
-            new_price: req.body.new_price,
-            old_price: req.body.old_price,
+            new_price: Number(req.body.new_price), // Convert to number
+            old_price: Number(req.body.old_price), // Convert to number
+            description: req.body.description || '' // Ensure description is saved
         });
         await product.save();
-        console.log('Product saved:', product.name);
+        console.log('Product saved:', product); // Log saved product
         res.json({ success: true, data: { name: req.body.name } });
     } catch (error) {
         console.error('Error in addproduct:', error);
@@ -249,6 +252,7 @@ app.post('/relatedproducts', async (req, res) => {
         console.log('Related products request:', req.body);
         let products = await Product.find({});
         let related = products.filter((item) => item.category === req.body.category || item.productType === req.body.productType);
+        let limitedRelated = related.slice(0, 6);
         console.log('Related fetched:', related.length);
         res.json({ success: true, data: related });
     } catch (error) {

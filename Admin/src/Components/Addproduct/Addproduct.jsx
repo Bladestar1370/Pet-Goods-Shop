@@ -8,9 +8,10 @@ const Addproduct = () => {
     name: "",
     image: "",
     category: "Dog",
-    productType: "Food", // Add default productType
+    productType: "Food",
     new_price: "",
     old_price: "",
+    description: "",
   });
 
   const imageHandler = (e) => {
@@ -22,9 +23,9 @@ const Addproduct = () => {
   };
 
   const Add_product = async () => {
-    console.log(productDetails);
+    console.log('Product Details:', productDetails); // Debug
     let responseData;
-    let product = productDetails;
+    let product = { ...productDetails };
 
     let formData = new FormData();
     formData.append("product", image);
@@ -43,7 +44,7 @@ const Addproduct = () => {
 
     if (responseData.success) {
       product.image = responseData.image_url;
-      console.log(product);
+      console.log('Product to send:', product); // Debug
       await fetch("http://localhost:4000/addproduct", {
         method: "POST",
         headers: {
@@ -54,8 +55,27 @@ const Addproduct = () => {
       })
         .then((resp) => resp.json())
         .then((data) => {
-          data.success ? alert("Product Added") : alert("Failed");
+          if (data.success) {
+            alert("Product Added");
+            // Reload page to refresh all_products
+            window.location.reload();
+            // Reset form
+            setProductDetails({
+              name: "",
+              image: "",
+              category: "Dog",
+              productType: "Food",
+              new_price: "",
+              old_price: "",
+              description: "",
+            });
+            setImage(false);
+          } else {
+            alert("Failed to add product");
+          }
         });
+    } else {
+      alert("Failed to upload image");
     }
   };
 
@@ -121,6 +141,17 @@ const Addproduct = () => {
           <option value="Accessory">Accessory</option>
           <option value="Grooming">Grooming</option>
         </select>
+      </div>
+      <div className="addproduct-itemfield">
+        <p>Product Description</p>
+        <textarea
+          value={productDetails.description}
+          onChange={changeHandler}
+          name="description"
+          placeholder="Enter product description"
+          rows="5"
+          style={{ width: "100%", resize: "vertical" }}
+        />
       </div>
       <div className="addproduct-itemfield">
         <label htmlFor="file-input">

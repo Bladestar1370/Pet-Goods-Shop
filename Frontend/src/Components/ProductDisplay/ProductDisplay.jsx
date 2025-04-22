@@ -37,9 +37,6 @@ export const ProductDisplay = ({ product }) => {
           <div className="productdisplay-right-price-old">${product.old_price}</div>
           <div className="productdisplay-right-price-new">${product.new_price}</div>
         </div>
-        <div className="productdisplay-right-description">
-          {product.description}
-        </div>
         <div className="productdisplay-right-size">
           <h1>Select Quantity</h1>
         </div>

@@ -5,8 +5,10 @@ import cross_icon from "../../assets/cross_icon.png";
 const Listproduct = () => {
   const [allproducts, setAllProducts] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchInfo = async () => {
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:4000/allproducts");
       const data = await response.json();
@@ -20,6 +22,8 @@ const Listproduct = () => {
       console.error("Error fetching products:", err);
       setError("Failed to load products. Please try again.");
       setAllProducts([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,54 +39,56 @@ const Listproduct = () => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: id })
+        body: JSON.stringify({ id: id }),
       });
       const data = await response.json();
       if (data.success) {
         await fetchInfo();
+        alert("Product Removed Successfully!");
       } else {
         console.error("Error removing product:", data.error);
+        alert("Failed to remove product");
       }
     } catch (err) {
       console.error("Error removing product:", err);
+      alert("Error removing product");
     }
   };
 
   return (
     <div className="list-product">
-      <h1>All Products List</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <div className="listproduct-format-main">
-        <p>Products</p>
-        <p>Title</p>
-        <p>Old Price</p>
-        <p>New Price</p>
-        <p>Category</p>
-        <p>Product Type</p>
-        <p>Remove</p>
-      </div>
-      <div className="listproduct-allproducts">
-        <hr />
-        {allproducts.length === 0 && !error && <p>No products available.</p>}
-        {allproducts.map((product, index) => (
-          <React.Fragment key={index}>
-            <div className="listproduct-format-main listproduct-format">
-              <img src={product.image} alt="" className="listproduct-product-icon" />
-              <p>{product.name}</p>
-              <p>${product.old_price}</p>
-              <p>${product.new_price}</p>
-              <p>{product.category}</p>
-              <p>{product.productType || "N/A"}</p>
+      <h2>All Products</h2>
+      {error && <p className="error-message">{error}</p>}
+      {loading && <p className="loading-message">Loading products...</p>}
+      <div className="listproduct-table">
+        <div className="listproduct-format-main">
+          <span>Image</span>
+          <span>Title</span>
+          <span>Old Price</span>
+          <span>New Price</span>
+          <span>Category</span>
+          <span>Type</span>
+          <span>Remove</span>
+        </div>
+        <div className="listproduct-allproducts">
+          {allproducts.length === 0 && !error && !loading && <p className="no-products">No products available.</p>}
+          {allproducts.map((product) => (
+            <div key={product.id} className="listproduct-format">
+              <img src={product.image} alt={product.name} className="listproduct-product-icon" />
+              <span>{product.name}</span>
+              <span>${product.old_price.toFixed(2)}</span>
+              <span>${product.new_price.toFixed(2)}</span>
+              <span>{product.category}</span>
+              <span>{product.productType || "N/A"}</span>
               <img
                 onClick={() => remove_product(product.id)}
-                className='listproduct-remove-icon'
+                className="listproduct-remove-icon"
                 src={cross_icon}
-                alt=""
+                alt="Remove"
               />
             </div>
-            <hr />
-          </React.Fragment>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -47,9 +47,9 @@ const SearchResults = () => {
                     {product.category || "No category available"}
                   </p>
                   <div className="item-prices">
-                    <div className="item-price">${product.new_price}</div>
+                    <div className="item-price">₹{product.new_price}</div>
                     {product.old_price && (
-                      <div className="item-price-old">${product.old_price}</div>
+                      <div className="item-price-old">₹{product.old_price}</div>
                     )}
                   </div>
                   <div className="item-buttons">

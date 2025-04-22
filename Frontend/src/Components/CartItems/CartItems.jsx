@@ -32,11 +32,11 @@ export const CartItems = () => {
                   className="carticon-product-icon"
                 />
                 <p>{product.name}</p>
-                <p>${product.new_price}</p>
+                <p>₹{product.new_price}</p>
                 <button className="cartitem-quantity">
                   {cartItems[product.id]}
                 </button>
-                <p>${product.new_price * cartItems[product.id]}</p>
+                <p>₹{product.new_price * cartItems[product.id]}</p>
                 <img
                   className="carticon-remove-icon"
                   src={cart_cross_icon}
@@ -66,7 +66,7 @@ export const CartItems = () => {
             <hr />
             <div className="cartitems-total-items">
               <h3>Total</h3>
-              <h3>${getTotalCartAmount()}</h3>
+              <h3>₹{getTotalCartAmount()}</h3>
             </div>
           </div>
           <button onClick={() => navigate('/checkout')}>PROCEED TO CHECKOUT</button>

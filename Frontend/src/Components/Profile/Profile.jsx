@@ -105,7 +105,7 @@ const Profile = () => {
                       <tr key={item.productId}>
                         <td>{item.name}</td>
                         <td>{item.quantity}</td>
-                        <td>${item.price.toFixed(2)}</td>
+                        <td>₹{item.price.toFixed(2)}</td>
                       </tr>
                     ))}
                   </tbody>

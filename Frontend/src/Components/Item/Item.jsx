@@ -25,7 +25,7 @@ export const Item = (props) => {
             {props.category || "No category available"}
           </p>
           <div className="item-prices">
-            <div className="item-price">${props.new_price}</div>
+            <div className="item-price">₹{props.new_price}</div>
           </div>
           <div className="item-buttons">
             <button

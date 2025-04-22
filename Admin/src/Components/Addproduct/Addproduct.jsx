@@ -23,7 +23,6 @@ const Addproduct = () => {
   };
 
   const Add_product = async () => {
-    console.log('Product Details:', productDetails); // Debug
     let responseData;
     let product = { ...productDetails };
 
@@ -44,7 +43,6 @@ const Addproduct = () => {
 
     if (responseData.success) {
       product.image = responseData.image_url;
-      console.log('Product to send:', product); // Debug
       await fetch("http://localhost:4000/addproduct", {
         method: "POST",
         headers: {
@@ -57,9 +55,6 @@ const Addproduct = () => {
         .then((data) => {
           if (data.success) {
             alert("Product Added");
-            // Reload page to refresh all_products
-            window.location.reload();
-            // Reset form
             setProductDetails({
               name: "",
               image: "",
@@ -81,40 +76,41 @@ const Addproduct = () => {
 
   return (
     <div className="add-product">
+      <h2>Add New Product</h2>
       <div className="addproduct-itemfield">
-        <p>Product title</p>
+        <label>Product Title</label>
         <input
           value={productDetails.name}
           onChange={changeHandler}
           type="text"
           name="name"
-          placeholder="Type here"
+          placeholder="Enter product name"
         />
       </div>
       <div className="addproduct-price">
         <div className="addproduct-itemfield">
-          <p>Price</p>
+          <label>Original Price</label>
           <input
             value={productDetails.old_price}
             onChange={changeHandler}
-            type="text"
+            type="number"
             name="old_price"
-            placeholder="Type here"
+            placeholder="Enter original price"
           />
         </div>
         <div className="addproduct-itemfield">
-          <p>Offer Price</p>
+          <label>Offer Price</label>
           <input
             value={productDetails.new_price}
             onChange={changeHandler}
-            type="text"
+            type="number"
             name="new_price"
-            placeholder="Type here"
+            placeholder="Enter offer price"
           />
         </div>
       </div>
       <div className="addproduct-itemfield">
-        <p>Product Category</p>
+        <label>Product Category</label>
         <select
           value={productDetails.category}
           onChange={changeHandler}
@@ -125,10 +121,11 @@ const Addproduct = () => {
           <option value="Cat">Cat</option>
           <option value="Bird">Bird</option>
           <option value="Fish">Fish</option>
+          <option value="Rabbit">Rabbit</option>
         </select>
       </div>
       <div className="addproduct-itemfield">
-        <p>Product Type</p>
+        <label>Product Type</label>
         <select
           value={productDetails.productType}
           onChange={changeHandler}
@@ -143,34 +140,37 @@ const Addproduct = () => {
         </select>
       </div>
       <div className="addproduct-itemfield">
-        <p>Product Description</p>
+        <label>Product Description</label>
         <textarea
           value={productDetails.description}
           onChange={changeHandler}
           name="description"
           placeholder="Enter product description"
           rows="5"
-          style={{ width: "100%", resize: "vertical" }}
         />
       </div>
       <div className="addproduct-itemfield">
-        <label htmlFor="file-input">
-          <img
-            src={image ? URL.createObjectURL(image) : upload_area}
-            className="add-product-thumbnail-img"
-            alt=""
+        <label>Product Image</label>
+        <div className="addproduct-image-upload">
+          <label htmlFor="file-input">
+            <img
+              src={image ? URL.createObjectURL(image) : upload_area}
+              className="add-product-thumbnail-img"
+              alt="Upload preview"
+            />
+          </label>
+          <input
+            onChange={imageHandler}
+            type="file"
+            name="image"
+            id="file-input"
+            accept="image/*"
+            hidden
           />
-        </label>
-        <input
-          onChange={imageHandler}
-          type="file"
-          name="image"
-          id="file-input"
-          hidden
-        />
+        </div>
       </div>
       <button onClick={Add_product} className="addproduct-btn">
-        ADD
+        Add Product
       </button>
     </div>
   );

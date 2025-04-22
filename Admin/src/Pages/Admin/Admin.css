@@ -1,9 +1,21 @@
 .admin {
-    display: flex;
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9fafb 0%, #e0f2fe 100%);
 }
 
-@media(max-width: 800px) {
-    .admin {
-        flex-direction: column;
-    }
+.admin-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+@media (max-width: 800px) {
+  .admin {
+    flex-direction: column;
+  }
+
+  .admin-content {
+    padding: 10px;
+  }
 }

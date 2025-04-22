@@ -28,7 +28,7 @@ export const WishlistItems = () => {
                   className="wishlisticon-product-icon"
                 />
                 <p>{product.name}</p>
-                <p>${product.new_price}</p>
+                <p>₹{product.new_price}</p>
                 <button
                   className="wishlistitem-add-to-cart"
                   onClick={() => addToCart(product.id)}

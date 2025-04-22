@@ -138,7 +138,7 @@ const Checkout = () => {
                     <img src={product.image} alt={product.name} className="cart-card-image" />
                     <div className="cart-card-info">
                       <div className="name">{product.name}</div>
-                      <div className="price">${product.new_price}/1 product</div>
+                      <div className="price">₹{product.new_price}/1 product</div>
                     </div>
                     <div className="quantity">{cartItems[product.id]}</div>
                     <div className="returnPrice">
@@ -253,7 +253,7 @@ const Checkout = () => {
               </div>
               <div className="row">
                 <div>Total Price</div>
-                <div className="totalPrice">${getTotalCartAmount().toFixed(2)}</div>
+                <div className="totalPrice">₹{getTotalCartAmount().toFixed(2)}</div>
               </div>
             </div>
             <button type="submit" className="buttonCheckout">

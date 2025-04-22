@@ -178,16 +178,17 @@ img {
   color: white;
 }
 
-.panel-ops p {
+.panel-link {
   display: inline;
   margin-left: 13px;
   color: #ffffff;
   font-size: 16px;
   margin: 10px 0;
   transition: color 0.3s ease;
+  text-decoration: none;
 }
 
-.panel-ops p:hover {
+.panel-link:hover {
   color: #f1f52c;
   cursor: pointer;
 }

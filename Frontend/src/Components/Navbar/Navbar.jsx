@@ -77,11 +77,11 @@ export const Navbar = () => {
           All
         </div>
         <div className="panel-ops">
-          <p>Toys Sale</p>
-          <p>Dogs</p>
-          <p>Cats</p>
-          <p>Small Animals</p>
-          <p>Pharmacy</p>
+        <Link className="panel-link" to="/product-type/toy">Toys Sale</Link>
+        <Link className="panel-link" to="/category/dog">Dogs</Link>
+        <Link className="panel-link" to="/category/cat">Cats</Link>
+        <Link className="panel-link" to="/category/rabbit">Small Animals</Link>
+          <Link className="panel-link" to="/product-type/medicine">Pharmacy</Link>
         </div>
       </div>
     </header>

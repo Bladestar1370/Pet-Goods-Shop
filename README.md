@@ -172,19 +172,3 @@ await fetch('http://localhost:4000/signup', {
 ```
 
 ---
-
-## Contributing
-
-Contributions welcome! Please fork the repo, make changes, and open a pull request.
-
----
-
-## License
-
-This project is licensed under the MIT License.
-
----
-
-## Contact
-
-For support or questions, email: support@myecommercewebsite.com

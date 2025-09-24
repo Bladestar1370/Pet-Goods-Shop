@@ -1,6 +1,50 @@
-# Pet-Goods-Shop
+# PET-GOODS-SHOP
+
+Transforming Pet Care, One Click at a Time
+
+![last commit](https://img.shields.io/github/last-commit/Bladestar1370/Pet-Goods-Shop?style=flat-square)
+![javascript](https://img.shields.io/badge/javascript-63.3%25-yellow?style=flat-square)
+![languages](https://img.shields.io/github/languages/count/Bladestar1370/Pet-Goods-Shop?style=flat-square)
+
+## Built with the tools and technologies:
+
+![Express](https://img.shields.io/badge/Express-000?logo=express&logoColor=white&style=flat-square)
+![JSON](https://img.shields.io/badge/JSON-000?logo=json&logoColor=white&style=flat-square)
+![Markdown](https://img.shields.io/badge/Markdown-000?logo=markdown&logoColor=white&style=flat-square)
+![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white&style=flat-square)
+![Mongoose](https://img.shields.io/badge/Mongoose-880000?logo=mongoose&logoColor=white&style=flat-square)
+![.ENV](https://img.shields.io/badge/.ENV-yellow?style=flat-square)
+
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black&style=flat-square)
+![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black&style=flat-square)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white&style=flat-square)
+![Stripe](https://img.shields.io/badge/Stripe-635BFF?logo=stripe&logoColor=white&style=flat-square)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white&style=flat-square)
+
+---
+
+## Table of Contents
+
+### **[Overview](#overview)**
+### **[Getting Started](#getting-started)**
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+
+### **[Features](#features)**
+### **[Project Structure](#project-structure)**
+### **[Usage](#usage)**
+### **[API Endpoints](#api-endpoints)**
+### **[Dependencies](#dependencies)**
+### **[Contributing](#contributing)**
+### **[License](#license)**
+### **[Contact](#contact)**
+
+---
 
 ## Overview
+
+...
+
 
 **Pet-Goods-Shop** is a full-stack e-commerce web application for pet products, featuring:
 - **Frontend**: User-facing shopping experience built with React + Vite.

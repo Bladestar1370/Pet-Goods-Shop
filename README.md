@@ -34,9 +34,6 @@ Transforming Pet Care, One Click at a Time
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [Dependencies](#dependencies)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ---
 
@@ -197,20 +194,3 @@ await fetch('http://localhost:4000/signup', {
 ```
 
 ---
-
-## Contributing
-
-Contributions welcome!  
-Fork the repo, make changes, and open a pull request.
-
----
-
-## License
-
-This project is licensed under the MIT License.
-
----
-
-## Contact
-
-For support or questions, email: support@myecommercewebsite.com

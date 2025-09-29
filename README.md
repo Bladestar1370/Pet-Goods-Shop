@@ -6,6 +6,16 @@ Transforming Pet Care, One Click at a Time
 ![javascript](https://img.shields.io/badge/javascript-63.3%25-yellow?style=flat-square)
 ![languages](https://img.shields.io/github/languages/count/Bladestar1370/Pet-Goods-Shop?style=flat-square)
 
+---
+
+## 🚀 Live Demo
+
+Explore the frontend in action: [Pet Goods Shop Frontend Live Demo]((https://pet-goods-shop.vercel.app/)
+
+> This demo showcases the customer-facing interface for browsing products, managing cart/wishlist, and placing orders.
+
+---
+
 ## Built with the tools and technologies:
 
 ![Express](https://img.shields.io/badge/Express-000?logo=express&logoColor=white&style=flat-square)

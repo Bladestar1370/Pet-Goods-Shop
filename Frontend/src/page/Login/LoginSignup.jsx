@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../Login/LoginSignUp.css";
+import "../Login/LoginSignup.css";
 
 export const LoginSignUp = () => {
   const [state, setState] = useState("Login");

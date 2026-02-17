@@ -1,5 +1,6 @@
 require('dotenv').config();
-const port = 4000;
+const port = process.env.PORT || 4000;
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -456,10 +457,7 @@ app.post('/orders', fetchUser, async (req, res) => {
     }
 });
 
-app.listen(port, (error) => {
-    if (!error) {
-        console.log('Server is running on port: ' + port);
-    } else {
-        console.error('Error: ' + error);
-    }
+
+app.listen(port, () => {
+    console.log('Server is running on port: ' + port);
 });

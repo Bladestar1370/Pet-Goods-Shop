@@ -27,7 +27,7 @@ export const ShopContextProvider = ({ children }) => {
 
   useEffect(() => {
     setLoading(true);
-    apiFetch("http://localhost:4000/allproducts")
+    apiFetch(`${API_URL}/allproducts`)
       .then((data) => {
         console.log('All products fetched:', data.length);
         setAllProducts(data);

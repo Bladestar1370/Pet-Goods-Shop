@@ -1,6 +1,5 @@
 require('dotenv').config();
 const port = process.env.PORT || 4000;
-
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -12,181 +11,214 @@ const bcrypt = require('bcrypt');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 app.use(express.json());
-app.use(cors());
 
-// Database connection with mongoose
-mongoose.connect(process.env.MONGO_URI);
+// Updated CORS configuration – allows your live Vercel frontend + local dev
+app.use(cors({
+  origin: [
+    'https://pet-goods-shop-72tm60u5m-sumit-dhuris-projects-32c3542e.vercel.app',
+    'http://localhost:5173',   // Vite default dev server
+    'http://localhost:3000',   // CRA default
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'auth-token', 'Authorization'],
+}));
 
-// API Creation
+// MongoDB connection with proper options & logging
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('✅ MongoDB Connected Successfully'))
+  .catch(err => {
+    console.error('❌ MongoDB Connection Failed:', err.message);
+    process.exit(1); // Let Render restart on fatal DB error
+  });
+
+// Helpful connection events for Render logs
+mongoose.connection.on('connected', () => console.log('Mongoose: connected'));
+mongoose.connection.on('error', err => console.error('Mongoose: error', err.message));
+mongoose.connection.on('disconnected', () => console.log('Mongoose: disconnected'));
+
+// Root endpoint
 app.get("/", (req, res) => {
-    res.json({ success: true, message: "Express App is Running" });
+  res.json({ success: true, message: "Express App is Running" });
 });
 
-// Image Storage Engine
+// Multer storage for images
 const storage = multer.diskStorage({
-    destination: './upload/Images',
-    filename: (req, file, cb) => {
-        return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
-    }
+  destination: './upload/Images',
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
+  }
 });
 
 const upload = multer({ storage: storage });
 
-// Creating Upload Endpoint for Images 
+// Serve static images
 app.use('/Images', express.static('upload/Images'));
+
+// Upload endpoint – now returns correct production URL
 app.post('/upload', upload.single('product'), (req, res) => {
-    try {
-        res.json({
-            success: 1,
-            image_url: `http://localhost:${port}/Images/${req.file.filename}`
-        });
-    } catch (error) {
-        console.error('Error in upload:', error);
-        res.status(500).json({ success: false, error: "Server error" });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: "No file uploaded" });
     }
+
+    // Use HTTPS + Render domain in production
+    const baseUrl = process.env.NODE_ENV === 'production'
+      ? 'https://pet-goods-shop.onrender.com'
+      : `http://localhost:${port}`;
+
+    const image_url = `${baseUrl}/Images/${req.file.filename}`;
+
+    res.json({
+      success: 1,
+      image_url: image_url
+    });
+  } catch (error) {
+    console.error('Upload error:', error.message);
+    res.status(500).json({ success: false, error: "Server error during upload" });
+  }
 });
 
-// Schema For Creating Products
+// ────────────────────────────────────────────────
+// Schemas (unchanged but grouped for clarity)
+// ────────────────────────────────────────────────
+
 const Product = mongoose.model('Product', {
-    id: { type: Number, required: true },
-    name: { type: String, required: true },
-    image: { type: String, required: true },
-    category: { type: String, required: true },
-    productType: { type: String, required: true },
-    new_price: { type: Number, required: true },
-    old_price: { type: Number, required: true },
-    description: { type: String, default: '' },
-    date: { type: Date, default: Date.now },
-    available: { type: Boolean, default: true },
+  id: { type: Number, required: true },
+  name: { type: String, required: true },
+  image: { type: String, required: true },
+  category: { type: String, required: true },
+  productType: { type: String, required: true },
+  new_price: { type: Number, required: true },
+  old_price: { type: Number, required: true },
+  description: { type: String, default: '' },
+  date: { type: Date, default: Date.now },
+  available: { type: Boolean, default: true },
 });
 
-// Schema for User Model
 const Users = mongoose.model('Users', {
-    name: { type: String },
-    email: { type: String, unique: true },
-    password: { type: String },
-    mobile: { type: String },
-    address: { type: String },
-    cartData: { type: Object },
-    wishlistData: { type: Object },
-    date: { type: Date, default: Date.now },
+  name: { type: String },
+  email: { type: String, unique: true },
+  password: { type: String },
+  mobile: { type: String },
+  address: { type: String },
+  cartData: { type: Object },
+  wishlistData: { type: Object },
+  date: { type: Date, default: Date.now },
 });
 
-// Schema for Orders
 const Order = mongoose.model('Order', {
-    userId: { type: String, required: true },
-    items: [
-        {
-            productId: Number,
-            name: String,
-            price: Number,
-            quantity: Number,
-        },
-    ],
-    shipping: {
-        name: String,
-        phone: String,
-        address: String,
-        country: String,
-        city: String,
-    },
-    total: { type: Number, required: true },
-    stripeSessionId: { type: String },
-    createdAt: { type: Date, default: Date.now },
+  userId: { type: String, required: true },
+  items: [{
+    productId: Number,
+    name: String,
+    price: Number,
+    quantity: Number,
+  }],
+  shipping: {
+    name: String,
+    phone: String,
+    address: String,
+    country: String,
+    city: String,
+  },
+  total: { type: Number, required: true },
+  stripeSessionId: { type: String },
+  createdAt: { type: Date, default: Date.now },
 });
 
-// Middleware to Fetch User
+// ────────────────────────────────────────────────
+// Auth Middleware
+// ────────────────────────────────────────────────
+
 const fetchUser = async (req, res, next) => {
-    const token = req.header('auth-token');
-    if (!token) {
-        res.status(401).json({ success: false, error: "Please authenticate using valid token" });
-    } else {
-        try {
-            const data = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = data.user;
-            next();
-        } catch (error) {
-            res.status(401).json({ success: false, error: "Please authenticate using valid token" });
-        }
-    }
+  const token = req.header('auth-token');
+  if (!token) {
+    return res.status(401).json({ success: false, error: "Please authenticate using valid token" });
+  }
+  try {
+    const data = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = data.user;
+    next();
+  } catch (error) {
+    console.error('Token verification error:', error.message);
+    res.status(401).json({ success: false, error: "Invalid or expired token" });
+  }
 };
 
-// Endpoint for Registering User
+// ────────────────────────────────────────────────
+// Routes (your original logic with minor improvements)
+// ────────────────────────────────────────────────
+
+// Signup
 app.post('/signup', async (req, res) => {
-    try {
-        console.log('Signup request:', req.body);
-        const { username, email, password, mobile, address } = req.body;
-        if (!username || !email || !password || !mobile || !address) {
-            return res.status(400).json({ success: false, error: "All fields are required" });
-        }
-        if (password.length < 8) {
-            return res.status(400).json({ success: false, error: "Password must be at least 8 characters" });
-        }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ success: false, error: "Invalid email format" });
-        }
-
-        let check = await Users.findOne({ email });
-        if (check) {
-            return res.status(400).json({ success: false, error: "Existing user found with same email address" });
-        }
-        let cart = {};
-        let wishlist = {};
-        for (let i = 0; i < 300; i++) {
-            cart[i] = 0;
-            wishlist[i] = false;
-        }
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-        const user = new Users({
-            name: username,
-            email,
-            password: hashedPassword,
-            mobile,
-            address,
-            cartData: cart,
-            wishlistData: wishlist,
-        });
-
-        await user.save();
-
-        const data = { user: { id: user.id } };
-        const token = jwt.sign(data, process.env.JWT_SECRET);
-        res.json({ success: true, token });
-    } catch (error) {
-        console.error('Error in signup:', error);
-        res.status(500).json({ success: false, error: "Server error" });
+  try {
+    const { username, email, password, mobile, address } = req.body;
+    if (!username || !email || !password || !mobile || !address) {
+      return res.status(400).json({ success: false, error: "All fields are required" });
     }
+    if (password.length < 8) {
+      return res.status(400).json({ success: false, error: "Password must be at least 8 characters" });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ success: false, error: "Invalid email format" });
+    }
+
+    const existingUser = await Users.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ success: false, error: "User already exists with this email" });
+    }
+
+    let cart = {}, wishlist = {};
+    for (let i = 0; i < 300; i++) {
+      cart[i] = 0;
+      wishlist[i] = false;
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new Users({
+      name: username,
+      email,
+      password: hashedPassword,
+      mobile,
+      address,
+      cartData: cart,
+      wishlistData: wishlist,
+    });
+
+    await user.save();
+
+    const token = jwt.sign({ user: { id: user.id } }, process.env.JWT_SECRET);
+    res.json({ success: true, token });
+  } catch (error) {
+    console.error('Signup error:', error.message);
+    res.status(500).json({ success: false, error: "Server error" });
+  }
 });
 
-// Endpoint for User Login
+// Login
 app.post('/login', async (req, res) => {
-    try {
-        console.log('Login request:', req.body);
-        const { email, password } = req.body;
-        if (!email || !password) {
-            return res.status(400).json({ success: false, error: "Email and password are required" });
-        }
-
-        let user = await Users.findOne({ email });
-        if (user) {
-            const passCompare = await bcrypt.compare(password, user.password);
-            if (passCompare) {
-                const data = { user: { id: user.id } };
-                const token = jwt.sign(data, process.env.JWT_SECRET);
-                res.json({ success: true, token });
-            } else {
-                res.json({ success: false, error: "Wrong Password" });
-            }
-        } else {
-            res.json({ success: false, error: "Wrong Email Id" });
-        }
-    } catch (error) {
-        console.error('Error in login:', error);
-        res.status(500).json({ success: false, error: "Server error" });
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ success: false, error: "Email and password required" });
     }
+
+    const user = await Users.findOne({ email });
+    if (!user) return res.status(400).json({ success: false, error: "Invalid email" });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ success: false, error: "Invalid password" });
+
+    const token = jwt.sign({ user: { id: user.id } }, process.env.JWT_SECRET);
+    res.json({ success: true, token });
+  } catch (error) {
+    console.error('Login error:', error.message);
+    res.status(500).json({ success: false, error: "Server error" });
+  }
 });
 
 // Endpoint to Get User Data
@@ -457,7 +489,6 @@ app.post('/orders', fetchUser, async (req, res) => {
     }
 });
 
-
 app.listen(port, () => {
-    console.log('Server is running on port: ' + port);
+  console.log(`Server running on port ${port}`);
 });

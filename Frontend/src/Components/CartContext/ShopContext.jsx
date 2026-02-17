@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { apiFetch } from "../../utils/apiFetch";
+import { API_URL } from "../../config/api";
 
 export const ShopContext = createContext();
 
@@ -27,7 +28,7 @@ export const ShopContextProvider = ({ children }) => {
 
   useEffect(() => {
     setLoading(true);
-    apiFetch(`${API_URL}/allproducts`)
+    apiFetch("/allproducts")
       .then((data) => {
         console.log('All products fetched:', data.length);
         setAllProducts(data);

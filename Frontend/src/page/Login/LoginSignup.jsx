@@ -1,5 +1,7 @@
+// src/page/Login/LoginSignup.jsx
 import React, { useState } from "react";
-import "./LoginSignUp.css";
+import "./LoginSignUp.css";  // Assuming filename is LoginSignUp.css – if lowercase, change to "./LoginSignup.css"
+import { API_URL } from "../../config/api";  // Adjust path if config is elsewhere
 
 export const LoginSignUp = () => {
   const [state, setState] = useState("Login");
@@ -10,6 +12,7 @@ export const LoginSignUp = () => {
     mobile: "",
     address: "",
   });
+  const [error, setError] = useState(null);  // For showing errors in UI
 
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,43 +20,49 @@ export const LoginSignUp = () => {
 
   const login = async () => {
     console.log("Login Function Executed", formData);
-    let responseData;
-    await fetch(`${API_URL}/login`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/form-data',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
-    if (responseData.success) {
-      localStorage.setItem('auth-token', responseData.token);
-      window.location.replace("/");
-    } else {
-      alert(responseData.error);
+    setError(null);
+    try {
+      const response = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (data.success) {
+        localStorage.setItem('auth-token', data.token);
+        window.location.replace("/");
+      } else {
+        setError(data.error);
+      }
+    } catch (err) {
+      setError("Server error – please try again");
+      console.error("Login error:", err);
     }
   };
 
   const signup = async () => {
     console.log("Signup Function Executed", formData);
-    let responseData;
-    await fetch('http://localhost:4000/signup', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/form-data',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
-    if (responseData.success) {
-      localStorage.setItem('auth-token', responseData.token);
-      window.location.replace("/");
-    } else {
-      alert(responseData.error);
+    setError(null);
+    try {
+      const response = await fetch(`${API_URL}/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (data.success) {
+        localStorage.setItem('auth-token', data.token);
+        window.location.replace("/");
+      } else {
+        setError(data.error);
+      }
+    } catch (err) {
+      setError("Server error – please try again");
+      console.error("Signup error:", err);
     }
   };
 
@@ -61,6 +70,7 @@ export const LoginSignUp = () => {
     <div className="loginsignup">
       <div className="loginsignup-container">
         <h1>{state}</h1>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <div className="loginsignup-fields">
           {state === "Sign Up" ? (
             <>

@@ -9,7 +9,7 @@ export const RelatedProducts = ({ category, productType }) => {
   useEffect(() => {
     if (category && productType) {
       console.log('Fetching related products with:', { category, productType });
-      apiFetch('http://localhost:4000/relatedproducts', {
+      apiFetch('/relatedproducts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -9,7 +9,7 @@ import { RelatedProducts } from "../Components/RelatedProducts/RelatedProducts.j
 const ProductDetails = () => {
   const { id } = useParams();
   const { all_products } = useContext(ShopContext);
-  const product = all_products.find((p) => p.id === Number(id)); // Ensure it's a number
+  const product = Array.isArray(all_products) ? all_products.find((p) => p.id === Number(id)) : null;
 
   if (!product) {
     return (

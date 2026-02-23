@@ -21,7 +21,8 @@ export const CartItems = () => {
         <p>Remove</p>
       </div>
       <hr />
-      {all_products.map((product) => {
+      {Array.isArray(all_products) &&
+      all_products.map((product) => {
         if (cartItems[product.id] > 0) {
           return (
             <div key={product.id}>

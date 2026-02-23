@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { apiFetch } from "../../utils/apiFetch";
-import { API_URL } from "../../config/api";
+
 
 export const ShopContext = createContext();
 
@@ -45,7 +45,7 @@ export const ShopContextProvider = ({ children }) => {
       if (token) {
         try {
           // Verify token by making a simple authenticated request
-          await apiFetch('http://localhost:4000/getcart', {
+          await apiFetch('/getcart', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export const ShopContextProvider = ({ children }) => {
             setCartItems(cartData);
           });
 
-          await apiFetch('http://localhost:4000/getwishlist', {
+          await apiFetch('/getwishlist', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export const ShopContextProvider = ({ children }) => {
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     if (localStorage.getItem("auth-token")) {
-      apiFetch("http://localhost:4000/addtocart", {
+      apiFetch("/addtocart", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -100,7 +100,7 @@ export const ShopContextProvider = ({ children }) => {
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) - 1 }));
     if (localStorage.getItem('auth-token')) {
-      apiFetch("http://localhost:4000/removefromcart", {
+      apiFetch("/removefromcart", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -117,7 +117,7 @@ export const ShopContextProvider = ({ children }) => {
   const addToWishlist = (itemId) => {
     setWishlistItems((prev) => ({ ...prev, [itemId]: true }));
     if (localStorage.getItem("auth-token")) {
-      apiFetch("http://localhost:4000/addtowishlist", {
+      apiFetch("/addtowishlist", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -134,7 +134,7 @@ export const ShopContextProvider = ({ children }) => {
   const removeFromWishlist = (itemId) => {
     setWishlistItems((prev) => ({ ...prev, [itemId]: false }));
     if (localStorage.getItem('auth-token')) {
-      apiFetch("http://localhost:4000/removefromwishlist", {
+      apiFetch("/removefromwishlist", {
         method: "POST",
         headers: {
           Accept: "application/json",

@@ -9,7 +9,7 @@ export const Popular = () => {
   const [popular, setpopular] = useState([]);
 
   useEffect(() => {
-    apiFetch('http://localhost:4000/popular')
+    apiFetch('/popular')
       .then((data) => setpopular(data))
       .catch((error) => console.error('Error fetching popular products:', error));
   }, []);

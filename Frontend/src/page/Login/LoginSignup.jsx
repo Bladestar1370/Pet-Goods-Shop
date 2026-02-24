@@ -1,6 +1,6 @@
 // src/page/Login/LoginSignup.jsx
 import React, { useState } from "react";
-import "./LoginSignUp.css";  // Assuming filename is LoginSignUp.css – if lowercase, change to "./LoginSignup.css"
+import "./LoginSignup.css";  // Assuming filename is LoginSignUp.css – if lowercase, change to "./LoginSignup.css"
 import { API_URL } from "../../config/api";  // Adjust path if config is elsewhere
 
 export const LoginSignUp = () => {
